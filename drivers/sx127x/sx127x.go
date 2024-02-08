@@ -329,9 +329,9 @@ func (d *Device) waitForAnyEvent(events uint8, end time.Time) irqFlags {
 			return irqFlags(e)
 		}
 
-		if d.dio0Pin == machine.NoPin {
-			runtime.Gosched()
-		}
+		// Enable other goroutines to run since we're in a busy loop waiting
+		// for an event
+		runtime.Gosched()
 
 		now = time.Now()
 	}
